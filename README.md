@@ -76,7 +76,8 @@ Either way it installs the `paintdotnet` command, a desktop launcher, and a bund
 
 ### 📦 Install (Arch Linux / EndeavourOS / Manjaro)
 
-From a local Git checkout, use the `PKGBUILD` in the repository root:
+On x86_64, use the root [PKGBUILD](PKGBUILD) to build and install a
+pacman-managed package from a local Git checkout:
 
 ```bash
 sudo pacman -S --needed base-devel cmake ninja git qt6-base qt6-imageformats zlib
@@ -85,14 +86,24 @@ cd paint.software
 makepkg -si
 ```
 
+Run `makepkg` as your normal user, **never with sudo**. Only dependency and
+package installation need administrator privileges. After installation, launch
+**paint.software** from the application menu or run `paintdotnet`.
+
 The root recipe builds **this checkout**, including local changes, rather than
 downloading upstream sources. It runs all four headless test suites and packages
 the `paintdotnet` command, desktop launcher, icon, metadata, MIT license and sample
 plugin. Build files stay under `build/makepkg/`, separate from the project's `src/`.
 The upstream-tracking AUR recipe remains in `packaging/aur/`.
 
-To build and test without installing or using sudo, run `makepkg` once the
-dependencies are installed. Install the resulting package later with:
+**Build without installing:** once the dependencies are installed, build and test
+without sudo:
+
+```bash
+makepkg
+```
+
+Install the resulting package later with:
 
 ```bash
 sudo pacman -U ./paint.software-git-*.pkg.tar.zst
@@ -100,7 +111,14 @@ paintdotnet
 ```
 
 Optionally install `qt6-translations` for translated standard dialog buttons.
-To update a clean checkout, run `git pull --ff-only` followed by `makepkg -si` again.
+
+**Update an existing installation:** from a clean checkout, run:
+
+```bash
+git pull --ff-only
+makepkg -si
+```
+
 After editing local sources without committing, use `makepkg -sfi` to force a
 rebuild instead of reusing an existing package with the same Git-based version.
 
