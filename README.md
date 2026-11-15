@@ -142,6 +142,70 @@ flatpak run io.github.univers4craft.PaintSoftware
 
 Or [build from source](#-build-from-source) — it works on any distribution.
 
+### Hyprland (Wayland): floating palettes
+
+If Hyprland tiles the utility windows, use these rules in the window-rules section
+of `hyprland.lua` (validated with Hyprland 0.57.1). They match the four English
+palette titles rather than floating every `paintdotnet` window, so the main editor
+stays tiled. Tools and Colors open on the left; History and Layers on the right.
+
+```lua
+-- paint.software palettes; the main editor stays tiled.
+hl.window_rule({
+    name = "paint-tools",
+    match = { class = "^paintdotnet$", initial_title = "^Tools$" },
+    float = true,
+    size = { 202, 340 },
+    move = { 65, 200 },
+    no_initial_focus = true,
+})
+
+hl.window_rule({
+    name = "paint-colors",
+    match = { class = "^paintdotnet$", initial_title = "^Colors$" },
+    float = true,
+    size = { 260, 380 },
+    move = { 40, "monitor_h-window_h-80" },
+    no_initial_focus = true,
+})
+
+hl.window_rule({
+    name = "paint-history",
+    match = { class = "^paintdotnet$", initial_title = "^History$" },
+    float = true,
+    size = { 300, 320 },
+    move = { "monitor_w-window_w-40", 200 },
+    no_initial_focus = true,
+})
+
+hl.window_rule({
+    name = "paint-layers",
+    match = { class = "^paintdotnet$", initial_title = "^Layers$" },
+    float = true,
+    size = { 300, 320 },
+    move = { "monitor_w-window_w-40", "monitor_h-window_h-80" },
+    no_initial_focus = true,
+})
+```
+
+Positions use monitor-local logical pixels, so no desktop monitor offset or
+manual scaling conversion is needed. The palettes overlay the main editor and
+remain movable and resizable. Adjust the starting sizes and margins to taste.
+`no_initial_focus` prevents the palettes from stealing focus during startup.
+
+Reload the configuration and check for errors:
+
+```bash
+hyprctl reload
+hyprctl configerrors
+```
+
+Then close and reopen paint.software. Floating, size and placement rules apply
+when windows open; a reload alone will not rearrange existing windows.
+For the French UI, replace the title matches with `Outils`, `Couleurs`,
+`Historique` and `Calques`, respectively.
+See the [Hyprland window-rule reference](https://wiki.hypr.land/configuring/core/rules/window-rules/).
+
 ### 🛠️ Build from source
 Requirements: a C++17 compiler, **CMake ≥ 3.16**, and **Qt 6** (Widgets, Gui, Core, PrintSupport).
 
