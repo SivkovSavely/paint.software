@@ -74,7 +74,37 @@ sudo apt install ./paint.software_*_amd64.deb
 Either way it installs the `paintdotnet` command, a desktop launcher, and a bundled sample plugin.
 *(Maintainers: the repository signing setup is documented in [SIGNING.md](SIGNING.md).)*
 
-### 📦 Install (any distribution — Fedora, Arch, openSUSE…)
+### 📦 Install (Arch Linux / EndeavourOS / Manjaro)
+
+From a local Git checkout, use the `PKGBUILD` in the repository root:
+
+```bash
+sudo pacman -S --needed base-devel cmake ninja git qt6-base qt6-imageformats zlib
+git clone https://github.com/SivkovSavely/paint.software.git
+cd paint.software
+makepkg -si
+```
+
+The root recipe builds **this checkout**, including local changes, rather than
+downloading upstream sources. It runs all four headless test suites and packages
+the `paintdotnet` command, desktop launcher, icon, metadata, MIT license and sample
+plugin. Build files stay under `build/makepkg/`, separate from the project's `src/`.
+The upstream-tracking AUR recipe remains in `packaging/aur/`.
+
+To build and test without installing or using sudo, run `makepkg` once the
+dependencies are installed. Install the resulting package later with:
+
+```bash
+sudo pacman -U ./paint.software-git-*.pkg.tar.zst
+paintdotnet
+```
+
+Optionally install `qt6-translations` for translated standard dialog buttons.
+To update a clean checkout, run `git pull --ff-only` followed by `makepkg -si` again.
+After editing local sources without committing, use `makepkg -sfi` to force a
+rebuild instead of reusing an existing package with the same Git-based version.
+
+### 📦 Install (any distribution — Fedora, openSUSE…)
 
 Not on a Debian-family system? Every release also ships a portable **AppImage** —
 download, make it executable, run. No installation, no root, works everywhere:

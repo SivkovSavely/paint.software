@@ -7,6 +7,10 @@ build*/
 *.so
 *.dylib
 
+# Arch Linux packages
+/*.pkg.tar.*
+/paint.software-git-*.log*
+
 # CMake
 CMakeCache.txt
 CMakeFiles/
